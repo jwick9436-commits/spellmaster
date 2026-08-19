@@ -47,6 +47,17 @@ A powerful spelling and vocabulary learning application designed to help users m
 
 ---
 
+## 📄 License
+MIT License
+
+## 📬 Contact
+- GitHub: [jwick9436-commits](https://github.com/jwick9436-commits)
+- Privacy Policy: [View Privacy Policy](privacy.html)
+
+---
+
+Made with ❤️ for language learners
+
 ## 📦 Installation
 
 1. Clone the repository:
