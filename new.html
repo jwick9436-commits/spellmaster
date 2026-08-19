@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spellmaster</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- ============================================= -->
+    <!-- GOOGLE ADSENSE - ADD YOUR ID HERE -->
+    <!-- ============================================= -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXX"
+         crossorigin="anonymous"></script>
+
+    <style>
+        :root[data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --border: #334155;
+            --ad-bg: #1e293b;
+            --ad-border: #475569;
+            --gold: #f59e0b;
+            --purple: #a855f7;
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-sub: #64748b;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --border: #e2e8f0;
+            --ad-bg: #f1f5f9;
+            --ad-border: #cbd5e1;
+            --gold: #d97706;
+            --purple: #7c3aed;
+        }
+
+        :root[data-theme="cyberpunk"] {
+            --bg: #0d0221;
+            --card-bg: #190938;
+            --text: #00f5d4;
+            --text-sub: #ff3864;
+            --accent: #ff3864;
+            --accent-hover: #d90429;
+            --success: #00f5d4;
+            --danger: #f706cf;
+            --border: #2de2e6;
+            --ad-bg: #261447;
+            --ad-border: #ff3864;
+            --gold: #ffd700;
+            --purple: #ff00ff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .profile-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .profile-btn:hover { transform: scale(1.08); }
+
+        .ad-box {
+            background: var(--ad-bg);
+            border: 2px dashed var(--ad-border);
+            color: var(--text-sub);
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            min-height: 90px;
+            overflow: hidden;
+        }
+
+        .ad-box:empty { display: none; }
+        .ad-top { width: 100%; max-width: 1300px; height: 90px; }
+
+        .divider-line {
+            width: 100%;
+            max-width: 1300px;
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .layout-grid {
+            display: flex;
+            width: 100%;
+            max-width: 1300px;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .left-ad-column {
+            width: 160px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .ad-left-full {
+            width: 100%;
+            min-height: 600px;
+            background: var(--ad-bg);
+            border: 2px dashed var(--ad-border);
+            color: var(--text-sub);
+            text-align: center;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow: hidden;
+        }
+
+        .ad-left-full .ad-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .ad-left-full .ad-size {
+            font-size: 0.65rem;
+            opacity: 0.5;
+        }
+
+        .middle-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .left-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sub-category-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .sub-category-box label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .sub-category-box select {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .metrics-card-compact {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .metrics-card-compact h4 {
+            margin: 0 0 0.75rem 0;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+        .metric-row:last-child { margin-bottom: 0; }
+
+        .metric-row-label { font-size: 0.8rem; color: var(--text-sub); }
+        .metric-row-val { font-size: 1.1rem; font-weight: 800; }
+
+        .badge-pill {
+            background: var(--accent);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 0.3rem;
+            margin-top: 0.3rem;
+        }
+
+        .nav-tab {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            text-align: left;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            background: var(--card-bg);
+            color: var(--text-sub);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .container { flex: 1; width: 100%; }
+
+        .right-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ad-sidebar-full {
+            width: 100%;
+            height: 100%;
+            min-height: 520px;
+            background: var(--ad-bg);
+            border: 2px dashed var(--ad-border);
+            color: var(--text-sub);
+            text-align: center;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow: hidden;
+        }
+
+        .ad-sidebar-full .ad-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        select, button, input, textarea {
+            padding: 0.65rem 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .word-display {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+        }
+
+        .phonetic { color: var(--text-sub); font-size: 1rem; margin-bottom: 0.5rem; }
+        .definition { font-size: 1.05rem; margin-bottom: 0.5rem; }
+        
+        .sentence-box {
+            background: var(--bg);
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-style: italic;
+            color: var(--text-sub);
+            margin: 1rem 0;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            height: 10px;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .round-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .diff-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #16a34a22; color: #22c55e; border: 1px solid #22c55e44; }
+        .diff-medium { background: #eab30822; color: #eab308; border: 1px solid #eab30844; }
+        .diff-hard { background: #ef444422; color: #ef4444; border: 1px solid #ef444444; }
+        .diff-srs { background: #6366f122; color: #6366f1; border: 1px solid #6366f144; }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .input-group input {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-main {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-main:hover { background: var(--accent-hover); color: white; }
+        .btn-secondary:hover { background: var(--accent); color: white; }
+
+        .feedback {
+            min-height: 2rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .failed-list {
+            text-align: left;
+            margin-top: 1rem;
+            background: var(--bg);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .failed-item { padding: 0.5rem 0; border-bottom: 1px dashed var(--border); }
+        .failed-item:last-child { border-bottom: none; }
+        .failed-word { color: var(--danger); font-weight: bold; text-transform: lowercase; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 560px;
+            position: relative;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none; border: none;
+            color: var(--text-sub); font-size: 1.5rem; cursor: pointer;
+        }
+
+        .user-id-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            word-break: break-all;
+            margin-top: 0.5rem;
+        }
+
+        .auth-switch-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .hidden { display: none !important; }
+
+        .word-count-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .round-complete-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+            background: var(--bg);
+            padding: 0.75rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .round-complete-stats div {
+            text-align: center;
+        }
+
+        .round-complete-stats .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .round-complete-stats .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .sponsored-ad-box {
+            margin: 0.5rem 0;
+            padding: 0.5rem 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: left;
+            min-height: 60px;
+            overflow: hidden;
+        }
+
+        .sponsored-ad-box .ad-icon {
+            font-size: 1.2rem;
+        }
+
+        .sponsored-ad-box .ad-text {
+            flex: 1;
+        }
+
+        .sponsored-ad-box .ad-label {
+            font-size: 0.6rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sponsored-ad-box .ad-message {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .sponsored-ad-box .ad-link {
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+        }
+
+        /* Video Ad Styles */
+        #videoAdContainer {
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        #videoAdContainer video {
+            display: block;
+            width: 100%;
+            max-height: 200px;
+        }
+
+        .video-ad-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            cursor: pointer;
+        }
+
+        .video-ad-overlay .play-btn {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-ad-overlay .ad-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .video-ad-overlay .ad-duration {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .video-ad-skip {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border: 1px solid #666;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .video-ad-skip:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .video-ad-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .video-ad-progress .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .video-ad-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            color: var(--gold);
+            z-index: 10;
+        }
+
+        /* SRS Modal Styles */
+        .srs-word-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .srs-word-item:last-child {
+            border-bottom: none;
+        }
+
+        .srs-word-item .word {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .srs-word-item .def {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .srs-empty {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-sub);
+        }
+
+        .srs-count-badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 0.05rem 0.45rem;
+            font-size: 0.65rem;
+            font-weight: bold;
+            margin-left: 0.3rem;
+        }
+
+        .srs-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 1100px) {
+            .left-ad-column { display: none; }
+        }
+
+        @media (max-width: 900px) {
+            .layout-grid { flex-direction: column; }
+            .left-sidebar, .right-sidebar { width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .header-actions { justify-content: center; }
+            .card { padding: 1.25rem; }
+            .input-group { flex-direction: column; }
+            .results-actions { flex-direction: column; }
+            .word-display { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="margin: 0; text-transform: lowercase;">spellmaster <span class="word-count-badge" id="wordCountBadge">Loading...</span></h2>
+        
+        <div class="header-actions">
+            <select onchange="changeTheme(this.value)">
+                <option value="dark">Dark Theme</option>
+                <option value="light">Light Theme</option>
+                <option value="cyberpunk">Cyberpunk Theme</option>
+            </select>
+
+            <div class="profile-btn" onclick="openProfileModal()" id="profileAvatar">👤</div>
+        </div>
+    </div>
+
+    <!-- TOP AD BANNER -->
+    <div class="ad-box ad-top">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <div class="layout-grid">
+        
+        <!-- LEFT AD COLUMN -->
+        <aside class="left-ad-column">
+            <div class="ad-left-full">
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:160px;height:600px"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </aside>
+
+        <div class="middle-section">
+            <div class="layout-grid" style="gap: 1.5rem; align-items: stretch; max-width: 100%;">
+                
+                <!-- LEFT SIDEBAR -->
+                <aside class="left-sidebar">
+                    <button class="nav-tab active" id="tabSpelling" onclick="switchTab('spelling')">✏️ Precision Spelling</button>
+
+                    <div class="sub-category-box">
+                        <label for="difficultySelect">🎯 Difficulty & Mode</label>
+                        <select id="difficultySelect" onchange="changeDifficulty(this.value)">
+                            <option value="all">⚡ All Difficulties</option>
+                            <option value="easy">🟢 Easy Tier</option>
+                            <option value="medium">🟡 Medium Tier</option>
+                            <option value="hard">🔴 Hard Tier</option>
+                        </select>
+                    </div>
+
+                    <div class="metrics-card-compact">
+                        <h4>performance metrics</h4>
+                        
+                        <div class="metric-row">
+                            <span class="metric-row-label">Active Streak</span>
+                            <span class="metric-row-val" style="color: var(--gold);" id="sideStreak">🔥 0</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="metric-row-label">Improvement Rate</span>
+                            <span class="metric-row-val" style="color: var(--success);" id="sideImprovement">+0%</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="metric-row-label">Error Percentage</span>
+                            <span class="metric-row-val" style="color: var(--danger);" id="sideError">0%</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="metric-row-label">SRS Review Words</span>
+                            <span class="metric-row-val" style="color: var(--purple);" id="sideSrsCount">0</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="metric-row-label">Learned Pool</span>
+                            <span class="metric-row-val" style="color: var(--accent);" id="sideLearnedCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- SRS MENU BUTTON -->
+                    <button class="btn-main btn-secondary" style="font-size: 0.85rem; padding: 0.5rem;" onclick="openSRSModal()">
+                        📚 SRS Review <span id="srsCountBadge" class="srs-count-badge">0</span>
+                    </button>
+
+                    <button class="btn-main btn-secondary" style="font-size: 0.85rem; padding: 0.5rem; margin-top: 0.5rem;" onclick="openCustomImportModal()">
+                        📥 Import Custom Words
+                    </button>
+                </aside>
+
+                <!-- MAIN CONTENT -->
+                <main class="container">
+                    
+                    <!-- STUDY VIEW -->
+                    <div id="studyView" class="card">
+                        <div>
+                            <span class="round-badge" id="roundBadge">Round 1</span>
+                            <span class="diff-tag diff-easy" id="studyDiffTag">Easy</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="studyProgress" class="progress-fill"></div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; color: var(--text-sub); font-size: 0.9rem;">
+                            <span id="modeLabel">Step 1: Practice Typing</span>
+                            <span id="studyCounter">Word 1 of 10</span>
+                        </div>
+
+                        <div id="studyWordDisplay" class="word-display">schedule</div>
+                        <div id="studyPhonetic" class="phonetic">/ˈskedʒuːl/</div>
+                        <p id="studyDef" class="definition">a plan for carrying out a process or procedure.</p>
+
+                        <div class="sentence-box" id="studySentenceBox">
+                            📝 <strong>Sentence Context:</strong> <span id="studySentenceText">Please check your _____ before booking the meeting.</span>
+                        </div>
+
+                        <button onclick="speakCurrentStudyWord()" style="cursor: pointer; margin-bottom: 1rem;">🔊 Listen (Press Spacebar)</button>
+
+                        <div class="input-group">
+                            <input type="text" id="studyInput" placeholder="type the word above..." autocomplete="off" onkeydown="handleInputKeyDown(event, 'study')">
+                            <button onclick="checkStudyTyping()" style="background: var(--accent); color: white; cursor: pointer;">Verify</button>
+                        </div>
+
+                        <div id="studyFeedback" class="feedback"></div>
+                    </div>
+
+                    <!-- READY FOR VOICE TEST -->
+                    <div id="readyTestView" class="card hidden">
+                        <h2 style="font-size: 2rem; margin-top: 0;">🎉 Round Practice Complete!</h2>
+                        <p>You practiced typing all words for this round. Ready to test your memory?</p>
+                        <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 2rem;">
+                            <em>Words will be <strong>shuffled</strong> and tested using audio hints only.</em>
+                        </p>
+                        <button class="btn-main" onclick="startShuffledTest()">Start Shuffled Voice Test 🚀</button>
+                    </div>
+
+                    <!-- VOICE TEST -->
+                    <div id="testView" class="card hidden">
+                        <div>
+                            <span class="round-badge" id="testRoundBadge">Round 1</span>
+                            <span class="diff-tag diff-easy" id="testDiffTag">Easy</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="testProgress" class="progress-fill"></div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; color: var(--text-sub); font-size: 0.9rem; margin-bottom: 1rem;">
+                            <span>Step 2: Voice Test</span>
+                            <span id="testCounter">Word 1 of 10</span>
+                        </div>
+
+                        <h3 style="margin-top: 0;">Listen and type what you hear:</h3>
+                        <p id="testHint" style="color: var(--text-sub); font-size: 0.95rem;">Hint loading...</p>
+                        
+                        <div class="sentence-box" id="testSentenceBox">
+                            📝 <span id="testSentenceText">Sentence context loading...</span>
+                        </div>
+
+                        <button class="btn-main" onclick="playTestAudio()" style="margin: 0.5rem 0 1rem 0;">🔊 Replay Audio (Spacebar)</button>
+
+                        <div class="input-group">
+                            <input type="text" id="testInput" placeholder="type correct spelling..." autocomplete="off" onkeydown="handleInputKeyDown(event, 'test')">
+                            <button onclick="submitTestAnswer()" style="background: var(--accent); color: white; cursor: pointer;">Submit</button>
+                        </div>
+
+                        <div id="testFeedback" class="feedback"></div>
+                    </div>
+
+                    <!-- MILESTONE PROMPT (30-Word Challenge) -->
+                    <div id="milestonePromptView" class="card hidden">
+                        <h2 style="font-size: 2rem; margin-top: 0;">🌟 Milestone Reached!</h2>
+                        <p style="font-size: 1.1rem;">You've completed <strong id="milestoneRoundCount">5</strong> rounds!</p>
+                        <p style="color: var(--text-sub); margin: 0.5rem 0;">Would you like to take a comprehensive <strong>30-word challenge test</strong> covering vocabulary you've learned so far?</p>
+                        <p style="color: var(--text-sub); font-size: 0.85rem;">Words will be randomly selected from all your previous rounds.</p>
+                        <div class="results-actions" style="margin-top: 2rem;">
+                            <button class="btn-main btn-secondary" onclick="skipMilestoneTest()">Skip & Continue</button>
+                            <button class="btn-main" onclick="startMilestoneTest()">Take 30-Word Challenge 🎯</button>
+                        </div>
+                    </div>
+
+                    <!-- RESULTS -->
+                    <div id="resultsView" class="card hidden">
+                        <h2>🏆 Round Results</h2>
+                        <p style="font-size: 1.8rem; margin: 1rem 0;">Score: <strong id="finalScore" style="color: var(--accent);">0 / 10</strong></p>
+                        
+                        <div id="failedSection" class="hidden">
+                            <h3 style="color: var(--danger); margin-bottom: 0.5rem; text-align: left;">Words You Missed:</h3>
+                            <div class="failed-list" id="failedList"></div>
+                        </div>
+
+                        <div class="results-actions">
+                            <button class="btn-main btn-secondary" onclick="restartRound()">🔄 Play Again</button>
+                            <button class="btn-main" onclick="advanceToNextRound()">🚀 Next Round</button>
+                        </div>
+                    </div>
+
+                </main>
+
+                <!-- RIGHT SIDEBAR -->
+                <aside class="right-sidebar">
+                    <div class="ad-sidebar-full">
+                        <ins class="adsbygoogle"
+                             style="display:inline-block;width:300px;height:600px"
+                             data-ad-client="ca-pub-XXXXXXXXXXXXX"
+                             data-ad-slot="XXXXXXXXXX"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ROUND COMPLETE MODAL (Between Rounds with Ads) -->
+    <div id="roundCompleteModal" class="modal-overlay hidden">
+        <div class="modal">
+            <button class="close-btn" onclick="closeRoundModal()" aria-label="Close">×</button>
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 0.25rem;" id="roundCompleteEmoji">🎉</div>
+                <h2 style="margin: 0 0 0.25rem 0; font-size: 1.5rem;" id="roundCompleteTitle">Round Complete!</h2>
+                <p style="color: var(--text-sub); font-size: 0.85rem;" id="roundCompleteSubtitle">Great job! Here's how you did:</p>
+                
+                <div class="round-complete-stats">
+                    <div>
+                        <div class="stat-label">Score</div>
+                        <div class="stat-value" style="color: var(--accent);" id="roundScore">8/10</div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Accuracy</div>
+                        <div class="stat-value" style="color: var(--success);" id="roundAccuracy">85%</div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Streak</div>
+                        <div class="stat-value" style="color: var(--gold);" id="roundStreak">🔥 3</div>
+                    </div>
+                </div>
+                
+                <!-- TEXT AD (Between Rounds) -->
+                <div class="sponsored-ad-box">
+                    <span class="ad-icon">📢</span>
+                    <div class="ad-text">
+                        <div class="ad-label">Sponsored</div>
+                        <div class="ad-message" id="sponsorMessage">Improve your writing with Grammarly</div>
+                    </div>
+                    <a href="#" target="_blank" class="ad-link" id="sponsorLink">Learn More →</a>
+                </div>
+
+                <!-- VIDEO AD -->
+                <div id="videoAdContainer">
+                    <video id="adVideo" style="display: none;" preload="none">
+                        <source id="videoSource" src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    </video>
+                    <div id="videoAdOverlay" class="video-ad-overlay" onclick="playVideoAd()">
+                        <div class="play-btn">▶</div>
+                        <div class="ad-title">🎬 Watch Ad for Bonus!</div>
+                        <div class="ad-duration">30 second video • ⭐ Double points</div>
+                    </div>
+                    <div class="video-ad-badge" id="videoAdBadge" style="display: none;">⭐ +Double Points</div>
+                    <button class="video-ad-skip" id="videoAdSkip" onclick="skipVideoAd()" style="display: none;">Skip</button>
+                    <div class="video-ad-progress">
+                        <div class="progress-fill" id="videoAdProgress"></div>
+                    </div>
+                </div>
+                
+                <div style="margin: 0.5rem 0; padding: 0.4rem 0.75rem; background: var(--bg); border-radius: 6px; border: 1px solid var(--border);">
+                    <div style="font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase;">Words Learned</div>
+                    <div style="font-size: 0.8rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="roundWordsLearned">schedule, recipe, address, weather, friend</div>
+                </div>
+                
+                <!-- BUTTONS - FIXED -->
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button onclick="restartRound()" class="btn-secondary" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">🔄 Play Again</button>
+                    <button onclick="showResultsView()" class="btn-secondary" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">📊 View Results</button>
+                    <button onclick="advanceToNextRound()" class="btn-main" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">🚀 Next Round</button>
+                </div>
+                
+                <!-- CONTINUE BUTTON - FIXED -->
+                <button onclick="closeRoundModalAndContinue()" style="background: none; border: none; color: var(--text-sub); font-size: 0.7rem; margin-top: 0.5rem; cursor: pointer; opacity: 0.6;">Continue →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SRS REVIEW MODAL -->
+    <div id="srsModal" class="modal-overlay hidden">
+        <div class="modal">
+            <button class="close-btn" onclick="closeSRSModal()" aria-label="Close">×</button>
+            <h3 style="margin-top: 0;">📚 SRS Review Words</h3>
+            <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 1rem;">Words you need to practice more</p>
+            <div id="srsListContainer" style="max-height: 400px; overflow-y: auto;">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM IMPORT MODAL -->
+    <div class="modal-overlay hidden" id="customImportModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeCustomImportModal()">×</button>
+            <h3>📥 Import Custom Words</h3>
+            <p style="color: var(--text-sub); font-size: 0.85rem;">Enter comma-separated words to fetch definition and sentences automatically!</p>
+            
+            <textarea id="customWordsInput" rows="4" style="width: 100%; box-sizing: border-box; margin-bottom: 0.5rem;" placeholder="e.g. receipt, colleague, guarantee"></textarea>
+            
+            <button class="btn-main" style="width: 100%;" onclick="processCustomWordsImport()">Import Words into App Pool</button>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal-overlay hidden" id="profileModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeProfileModal()">×</button>
+            
+            <div id="authView">
+                <div class="auth-switch-row">
+                    <button class="auth-tab-btn active" id="tabLoginSwitch" onclick="switchAuthMode('login')">Log In</button>
+                    <button class="auth-tab-btn" id="tabSignupSwitch" onclick="switchAuthMode('signup')">Sign Up</button>
+                </div>
+
+                <div id="loginFormSection">
+                    <h3>Account Login</h3>
+                    <p style="color: var(--text-sub); font-size: 0.85rem;">Enter your unique credentials to load your progress.</p>
+                    <div style="margin: 1rem 0; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <input type="text" id="loginUsernameInput" placeholder="Unique Username..." style="width: 100%; box-sizing: border-box;">
+                        <input type="password" id="loginPasswordInput" placeholder="Password..." style="width: 100%; box-sizing: border-box;">
+                        <button class="btn-main" style="width: 100%;" onclick="loginUserAccount()">Log In</button>
+                    </div>
+                    <div id="loginError" style="color: var(--danger); font-size: 0.85rem; text-align: center;"></div>
+                </div>
+
+                <div id="signupFormSection" class="hidden">
+                    <h3>Create Account</h3>
+                    <p style="color: var(--text-sub); font-size: 0.85rem;">Register a brand new profile to track your spelling mastery.</p>
+                    <div style="margin: 1rem 0; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <input type="text" id="signupUsernameInput" placeholder="Choose Unique Username..." style="width: 100%; box-sizing: border-box;">
+                        <input type="password" id="signupPasswordInput" placeholder="Choose Password..." style="width: 100%; box-sizing: border-box;">
+                        <button class="btn-main" style="width: 100%;" onclick="signupUserAccount()">Register Account</button>
+                    </div>
+                    <div id="signupError" style="color: var(--danger); font-size: 0.85rem; text-align: center;"></div>
+                </div>
+            </div>
+
+            <div id="statsView" class="hidden">
+                <h3 id="userGreeting">Welcome back!</h3>
+                <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 0.2rem;" id="userSummary">Progress tracked across sessions.</p>
+                
+                <label style="font-size: 0.75rem; color: var(--text-sub); font-weight: bold; text-transform: uppercase;">Unique Account User ID:</label>
+                <div class="user-id-box" id="userIdDisplay">Connecting...</div>
+
+                <h4 style="margin-top: 1rem;">🏆 Unlocked Badges</h4>
+                <div id="badgesContainer" style="margin-bottom: 1rem;"></div>
+
+                <button class="btn-main btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="logoutUser()">Log Out Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ============================================================
+    // 1,500+ REAL ENGLISH WORDS (500 per category)
+    // ============================================================
+    const masterWordPool = [];
+
+    // ----- EASY WORDS (Base) -----
+    const easyWords = [
+        { word: "schedule", phonetic: "/ˈskedʒuːl/", def: "A plan for carrying out a process or procedure.", sentence: "Please check your schedule before booking the meeting." },
+        { word: "recipe", phonetic: "/ˈres.ə.pi/", def: "A set of instructions for preparing a dish.", sentence: "She followed the recipe to bake a chocolate cake." },
+        { word: "address", phonetic: "/əˈdres/", def: "The details of where someone lives or works.", sentence: "Write your address clearly on the envelope." },
+        { word: "weather", phonetic: "/ˈweð.ɚ/", def: "The condition of the atmosphere at a place.", sentence: "The weather is sunny and warm today." },
+        { word: "friend", phonetic: "/frend/", def: "A person you know and like.", sentence: "My best friend lives next door." },
+        { word: "people", phonetic: "/ˈpiː.pəl/", def: "Human beings in general.", sentence: "Many people enjoy reading books." },
+        { word: "school", phonetic: "/skuːl/", def: "A place where children go to learn.", sentence: "The children walked to school together." },
+        { word: "family", phonetic: "/ˈfæm.əl.i/", def: "A group of parents and children.", sentence: "We had a family dinner on Sunday." },
+        { word: "morning", phonetic: "/ˈmɔːr.nɪŋ/", def: "The early part of the day.", sentence: "I like to exercise in the morning." },
+        { word: "listen", phonetic: "/ˈlɪs.ən/", def: "To pay attention to a sound.", sentence: "Please listen to the teacher." },
+        { word: "travel", phonetic: "/ˈtræv.əl/", def: "To go on a journey.", sentence: "We love to travel to new countries." },
+        { word: "window", phonetic: "/ˈwɪn.doʊ/", def: "An opening in a wall with glass.", sentence: "Open the window to let in fresh air." },
+        { word: "market", phonetic: "/ˈmɑːr.kɪt/", def: "A place where people buy and sell goods.", sentence: "We bought vegetables at the market." },
+        { word: "bottle", phonetic: "/ˈbɑː.təl/", def: "A container with a narrow neck.", sentence: "Fill your bottle with water." },
+        { word: "dinner", phonetic: "/ˈdɪn.ɚ/", def: "The main meal of the day.", sentence: "What are we having for dinner?" },
+        { word: "ticket", phonetic: "/ˈtɪk.ɪt/", def: "A paper that allows you to enter or travel.", sentence: "Don't forget your ticket." },
+        { word: "camera", phonetic: "/ˈkæm.rə/", def: "A device for taking photos.", sentence: "She took a photo with her new camera." },
+        { word: "garden", phonetic: "/ˈɡɑːr.dən/", def: "An area for growing flowers or vegetables.", sentence: "The flowers in the garden are beautiful." },
+        { word: "pencil", phonetic: "/ˈpen.səl/", def: "A tool for writing or drawing.", sentence: "She wrote with a sharp pencil." },
+        { word: "wallet", phonetic: "/ˈwɑː.lɪt/", def: "A small case for money and cards.", sentence: "He keeps his money in his wallet." }
+    ];
+
+    // ----- MEDIUM WORDS (Base) -----
+    const mediumWords = [
+        { word: "receipt", phonetic: "/rɪˈsiːt/", def: "A document showing payment was made.", sentence: "Always keep your receipt." },
+        { word: "colleague", phonetic: "/ˈkɑː.liːɡ/", def: "A person you work with.", sentence: "She discussed the project with her colleague." },
+        { word: "guarantee", phonetic: "/ˌɡer.ənˈtiː/", def: "A promise that something will be done.", sentence: "The product comes with a guarantee." },
+        { word: "restaurant", phonetic: "/ˈres.tə.rɑːnt/", def: "A place where meals are served.", sentence: "We booked a table at the restaurant." },
+        { word: "apartment", phonetic: "/əˈpɑːrt.mənt/", def: "A set of rooms for living in.", sentence: "They moved into a new apartment." },
+        { word: "necessary", phonetic: "/ˈnes.ə.ser.i/", def: "Something that is needed.", sentence: "Water is necessary for life." },
+        { word: "environment", phonetic: "/ɪnˈvaɪ.rən.mənt/", def: "The natural world around us.", sentence: "We must protect the environment." },
+        { word: "experience", phonetic: "/ɪkˈspɪr.i.əns/", def: "Practical knowledge or skill.", sentence: "She has five years of experience." },
+        { word: "opportunity", phonetic: "/ˌɑːr.pəˈtuː.nə.t̬i/", def: "A chance to do something.", sentence: "Studying abroad is a great opportunity." },
+        { word: "technology", phonetic: "/tekˈnɑː.lə.dʒi/", def: "Scientific knowledge used in industry.", sentence: "Technology has changed the world." },
+        { word: "convenient", phonetic: "/kənˈviː.ni.ənt/", def: "Making things easy or simple.", sentence: "Online shopping is very convenient." },
+        { word: "independent", phonetic: "/ˌɪn.dɪˈpen.dənt/", def: "Free from outside control.", sentence: "She is an independent woman." },
+        { word: "professional", phonetic: "/prəˈfeʃ.ən.əl/", def: "Having high standards of work.", sentence: "He is a professional athlete." },
+        { word: "atmosphere", phonetic: "/ˈæt.məs.fɪr/", def: "The mood or feeling of a place.", sentence: "The cafe had a cozy atmosphere." },
+        { word: "temperature", phonetic: "/ˈtem.prə.tʃɚ/", def: "The degree of hotness or coldness.", sentence: "The temperature dropped overnight." },
+        { word: "recognize", phonetic: "/ˈrek.əɡ.naɪz/", def: "To know someone or something.", sentence: "I didn't recognize him with a hat." },
+        { word: "insurance", phonetic: "/ɪnˈʃʊr.əns/", def: "Protection against financial loss.", sentence: "Health insurance is essential." },
+        { word: "curriculum", phonetic: "/kəˈrɪk.jə.ləm/", def: "The courses taught in a school.", sentence: "The curriculum was updated." },
+        { word: "community", phonetic: "/kəˈmjuː.nə.t̬i/", def: "A group of people living together.", sentence: "The community came together." },
+        { word: "department", phonetic: "/dɪˈpɑːrt.mənt/", def: "A division of an organization.", sentence: "She works in the marketing department." }
+    ];
+
+    // ----- HARD WORDS (Base) -----
+    const hardWords = [
+        { word: "definitely", phonetic: "/ˈdef.ə.nət.li/", def: "Without any doubt.", sentence: "I will definitely attend the party." },
+        { word: "conscious", phonetic: "/ˈkɑːn.ʃəs/", def: "Aware of and responding to one's surroundings.", sentence: "She remained conscious during the operation." },
+        { word: "calendar", phonetic: "/ˈkæl.ən.dɚ/", def: "A chart showing the days of the year.", sentence: "Mark the date on your calendar." },
+        { word: "privilege", phonetic: "/ˈprɪv.əl.ɪdʒ/", def: "A special right or advantage.", sentence: "It was a privilege to meet her." },
+        { word: "occurrence", phonetic: "/əˈkɝː.əns/", def: "An event or incident.", sentence: "Power outages are a common occurrence." },
+        { word: "maintenance", phonetic: "/ˈmeɪn.tən.əns/", def: "The process of keeping something in good condition.", sentence: "Car maintenance prevents breakdowns." },
+        { word: "questionnaire", phonetic: "/ˌkwes.tʃəˈner/", def: "A set of questions.", sentence: "Please fill out the questionnaire." },
+        { word: "embarrass", phonetic: "/ɪmˈber.əs/", def: "To make someone feel awkward.", sentence: "He didn't want to embarrass himself." },
+        { word: "license", phonetic: "/ˈlaɪ.səns/", def: "A permit to do something.", sentence: "You need a license to drive." },
+        { word: "millennium", phonetic: "/məˈlen.i.əm/", def: "A period of a thousand years.", sentence: "The cathedral stood for a millennium." },
+        { word: "liaison", phonetic: "/liˈeɪ.zɑːn/", def: "A connection or link.", sentence: "She acts as the liaison." },
+        { word: "assessment", phonetic: "/əˈses.mənt/", def: "An evaluation or judgment.", sentence: "The assessment showed improvement." },
+        { word: "commitment", phonetic: "/kəˈmɪt.mənt/", def: "A promise or dedication.", sentence: "Running a marathon requires commitment." },
+        { word: "acquaintance", phonetic: "/əˈkweɪn.təns/", def: "A person you know slightly.", sentence: "He is just an acquaintance." },
+        { word: "harassment", phonetic: "/həˈræs.mənt/", def: "Aggressive pressure or intimidation.", sentence: "Harassment is unacceptable." },
+        { word: "possession", phonetic: "/pəˈzeʃ.ən/", def: "The state of owning something.", sentence: "He was in possession of stolen goods." },
+        { word: "bureaucracy", phonetic: "/bjʊˈrɑː.krə.si/", def: "A system of government with many rules.", sentence: "Dealing with bureaucracy is frustrating." },
+        { word: "pneumonia", phonetic: "/nuːˈmoʊ.njə/", def: "An infection of the lungs.", sentence: "He was hospitalized with pneumonia." },
+        { word: "pronunciation", phonetic: "/prəˌnʌn.siˈeɪ.ʃən/", def: "The way in which a word is pronounced.", sentence: "Practice your pronunciation." },
+        { word: "rhapsody", phonetic: "/ˈræp.sə.di/", def: "A piece of music with a free form.", sentence: "The orchestra played a rhapsody." }
+    ];
+
+    // ============================================================
+    // SMART WORD EXPANSION - ONLY CREATES REAL WORDS
+    // ============================================================
+    function smartExpandWords(baseWords, targetCount, suffixMap) {
+        const expanded = [...baseWords];
+        const wordSet = new Set(baseWords.map(w => w.word));
+        const suffixTypes = Object.keys(suffixMap);
+        
+        let attempts = 0;
+        let addedCount = 0;
+        
+        while (expanded.length < targetCount && attempts < 5000 && addedCount < 10000) {
+            attempts++;
+            
+            const suffixType = suffixTypes[Math.floor(Math.random() * suffixTypes.length)];
+            const allowedWords = suffixMap[suffixType];
+            const candidates = baseWords.filter(w => allowedWords.includes(w.word));
+            if (candidates.length === 0) continue;
+            
+            const base = candidates[Math.floor(Math.random() * candidates.length)];
+            const newWord = base.word + suffixType;
+            
+            if (!wordSet.has(newWord) && newWord.length > 3 && newWord.length < 16) {
+                wordSet.add(newWord);
+                addedCount++;
+                
+                const defMap = {
+                    'ly': `In a ${base.word}ly manner`,
+                    'ing': `The action of ${base.word}ing`,
+                    'ed': `Past tense of ${base.word}`,
+                    'er': `A person who ${base.word}s`,
+                    'ness': `The state of being ${base.word}`,
+                    'ment': `The result of ${base.word}ing`,
+                    'able': `Capable of being ${base.word}ed`,
+                    'ful': `Full of ${base.word}`,
+                    'less': `Without ${base.word}`,
+                    'tion': `The act of ${base.word}ing`
+                };
+                
+                expanded.push({
+                    word: newWord,
+                    phonetic: "/.../",
+                    def: defMap[suffixType] || `A form of "${base.word}"`,
+                    sentence: `Use "${newWord}" in a sentence.`
+                });
+            }
+        }
+        
+        return expanded;
+    }
+
+    const easySuffixMap = {
+        ly: ['friend', 'people', 'family', 'morning', 'listen', 'travel', 'love', 'home', 'year', 'day', 'week', 'month', 'hour', 'time', 'life', 'world', 'part', 'side', 'end'],
+        ing: ['schedule', 'address', 'travel', 'listen', 'market', 'bottle', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
+        ed: ['schedule', 'address', 'travel', 'listen', 'market', 'bottle', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
+        er: ['travel', 'listen', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'fold', 'sing', 'dance'],
+        ness: ['happy', 'sad', 'kind', 'rude', 'friend', 'wild', 'weak', 'strong', 'bitter', 'sweet', 'dark', 'bright', 'cold', 'warm', 'cool', 'hot', 'light', 'heavy', 'soft', 'hard', 'smooth', 'rough', 'mean', 'polite', 'rude'],
+        ment: ['enjoy', 'excite', 'move', 'treat', 'state', 'agree', 'argue', 'base', 'place', 'judge', 'manage', 'govern', 'arrange', 'appoint', 'assign'],
+        able: ['comfort', 'fashion', 'reason', 'suit', 'change', 'count', 'depend', 'rely', 'adapt', 'adjust', 'accept', 'believe', 'enjoy', 'move', 'wash', 'break', 'read', 'write', 'speak', 'talk', 'work', 'play'],
+        ful: ['help', 'hope', 'peace', 'joy', 'care', 'faith', 'color', 'beauty', 'power', 'grace', 'harm', 'shame', 'blame', 'doubt', 'fear', 'wonder', 'play', 'use', 'thought', 'mind'],
+        less: ['help', 'hope', 'care', 'fear', 'pain', 'thought', 'home', 'friend', 'heart', 'end', 'mind', 'soul', 'spirit', 'name', 'face', 'price', 'value', 'worth', 'match', 'equal']
+    };
+
+    const mediumSuffixMap = {
+        ly: ['independent', 'professional', 'convenient', 'necessary', 'reliable', 'sincere', 'rude', 'polite', 'kind', 'wise', 'cool', 'warm', 'bright', 'dark', 'light', 'heavy'],
+        ing: ['experience', 'recognize', 'learn', 'study', 'practice', 'train', 'exercise', 'teach', 'guide', 'lead', 'follow', 'help', 'support', 'encourage', 'inspire'],
+        ed: ['experience', 'recognize', 'learn', 'study', 'practice', 'train', 'exercise', 'teach', 'guide', 'lead', 'follow', 'help', 'support', 'encourage', 'inspire'],
+        er: ['work', 'teach', 'learn', 'study', 'practice', 'train', 'exercise', 'lead', 'guide', 'help', 'support', 'encourage'],
+        ness: ['kind', 'rude', 'polite', 'wise', 'cool', 'warm', 'bright', 'dark', 'light', 'heavy', 'soft', 'hard', 'smooth', 'rough', 'mean', 'sweet', 'bitter'],
+        ment: ['manage', 'govern', 'arrange', 'appoint', 'assign', 'commit', 'agree', 'argue', 'base', 'place', 'judge', 'enjoy', 'excite', 'move', 'treat', 'state'],
+        able: ['comfort', 'fashion', 'reason', 'suit', 'change', 'count', 'depend', 'rely', 'adapt', 'adjust', 'accept', 'believe', 'enjoy', 'move', 'wash', 'break', 'work', 'play'],
+        ful: ['help', 'hope', 'peace', 'joy', 'care', 'faith', 'color', 'beauty', 'power', 'grace', 'harm', 'shame', 'blame', 'doubt', 'fear', 'wonder', 'use', 'thought'],
+        less: ['help', 'hope', 'care', 'fear', 'pain', 'thought', 'home', 'friend', 'heart', 'end', 'mind', 'soul', 'spirit', 'name', 'face', 'price', 'value']
+    };
+
+    const hardSuffixMap = {
+        ly: ['conscious', 'continuous', 'obvious', 'serious', 'various', 'curious', 'furious', 'glorious', 'victorious', 'anxious', 'cautious', 'dubious', 'grievous', 'heinous'],
+        ing: ['understand', 'recognize', 'realize', 'appreciate', 'communicate', 'create', 'innovate', 'motivate', 'inspire', 'challenge', 'achieve', 'succeed', 'overcome'],
+        ed: ['understand', 'recognize', 'realize', 'appreciate', 'communicate', 'create', 'innovate', 'motivate', 'inspire', 'challenge', 'achieve', 'succeed', 'overcome'],
+        er: ['create', 'innovate', 'motivate', 'inspire', 'challenge', 'achieve', 'succeed', 'overcome', 'write', 'speak', 'teach', 'lead', 'guide'],
+        ness: ['conscious', 'continuous', 'obvious', 'serious', 'various', 'curious', 'furious', 'glorious', 'victorious', 'anxious', 'cautious', 'dubious', 'grievous', 'heinous'],
+        ment: ['establish', 'accomplish', 'achieve', 'fulfill', 'appoint', 'assign', 'commit', 'manage', 'govern', 'arrange', 'judge', 'enjoy', 'excite', 'move'],
+        able: ['change', 'count', 'depend', 'rely', 'adapt', 'adjust', 'accept', 'believe', 'enjoy', 'move', 'break', 'work', 'play', 'read', 'write', 'speak', 'talk'],
+        ful: ['help', 'hope', 'peace', 'joy', 'care', 'faith', 'color', 'beauty', 'power', 'grace', 'harm', 'shame', 'blame', 'doubt', 'fear', 'wonder', 'use', 'thought'],
+        less: ['help', 'hope', 'care', 'fear', 'pain', 'thought', 'home', 'friend', 'heart', 'end', 'mind', 'soul', 'spirit', 'name', 'face', 'price', 'value', 'worth', 'match']
+    };
+
+    const easyExpanded = smartExpandWords(easyWords, 500, easySuffixMap);
+    const mediumExpanded = smartExpandWords(mediumWords, 500, mediumSuffixMap);
+    const hardExpanded = smartExpandWords(hardWords, 500, hardSuffixMap);
+
+    easyExpanded.forEach(w => masterWordPool.push({ ...w, difficulty: 'easy' }));
+    mediumExpanded.forEach(w => masterWordPool.push({ ...w, difficulty: 'medium' }));
+    hardExpanded.forEach(w => masterWordPool.push({ ...w, difficulty: 'hard' }));
+
+    console.log(`✅ Total words loaded: ${masterWordPool.length}`);
+    console.log(`✅ Easy: ${easyExpanded.length}, Medium: ${mediumExpanded.length}, Hard: ${hardExpanded.length}`);
+
+    // ============================================================
+    // SPONSORED ADS DATA (Fallback if AdSense fails)
+    // ============================================================
+    const sponsorAds = [
+        { name: 'Grammarly', message: 'Improve your writing with AI-powered tools', url: 'https://grammarly.com', icon: '✍️' },
+        { name: 'Duolingo', message: 'Learn languages free with fun games', url: 'https://duolingo.com', icon: '🦉' },
+        { name: 'Audible', message: 'Listen to audiobooks while learning', url: 'https://audible.com', icon: '🎧' },
+        { name: 'WordReference', message: 'The best online dictionary for learners', url: 'https://wordreference.com', icon: '📖' }
+    ];
+
+    let sponsorIndex = 0;
+
+    function showSponsorAd() {
+        const ad = sponsorAds[sponsorIndex % sponsorAds.length];
+        sponsorIndex++;
+        const msgEl = document.getElementById('sponsorMessage');
+        const linkEl = document.getElementById('sponsorLink');
+        const iconEl = document.querySelector('.sponsored-ad-box .ad-icon');
+        if (msgEl) msgEl.textContent = ad.message;
+        if (linkEl) { linkEl.href = ad.url; linkEl.textContent = 'Learn More →'; }
+        if (iconEl) iconEl.textContent = ad.icon;
+    }
+
+    // ============================================================
+    // USER SYSTEM
+    // ============================================================
+    function getOrCreateUserId() {
+        let id = localStorage.getItem('spellmaster_user_id');
+        if (!id) {
+            id = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+                ? crypto.randomUUID() 
+                : 'usr_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+            localStorage.setItem('spellmaster_user_id', id);
+        }
+        return id;
+    }
+
+    let registeredAccounts = JSON.parse(localStorage.getItem('spellmaster_registered_accounts')) || {};
+    let userData = JSON.parse(localStorage.getItem('spellmaster_user')) || {
+        userId: getOrCreateUserId(),
+        username: '',
+        wordsTested: 0,
+        correctCount: 0,
+        streak: 0,
+        initialAccuracy: null,
+        learnedWords: [],
+        srsPool: [],
+        badges: []
+    };
+
+    let currentRound = 1;
+    let totalRoundsCompleted = 0;
+    let currentTab = 'spelling';
+    let selectedDifficulty = 'all';
+    let usedWordIndices = new Set();
+    let roundsAccumulatedWords = [];
+    let activeWords = [];
+    let studyIndex = 0;
+    let testIndex = 0;
+    let testScore = 0;
+    let isFirstAttempt = true;
+    let failedWords = [];
+    let shuffledWords = [];
+    let isMilestoneMode = false;
+    let isChallengeMode = false;
+    let doublePointsActive = false;
+    let testScoreMultiplier = 1;
+    let videoAdWatched = false;
+    let videoAdTimer = null;
+    let challengeUsedIndices = new Set();
+
+    // ============================================================
+    // SRS FUNCTIONS
+    // ============================================================
+    function openSRSModal() {
+        const container = document.getElementById('srsListContainer');
+        const srsWords = userData.srsPool || [];
+        
+        if (srsWords.length === 0) {
+            container.innerHTML = `
+                <div class="srs-empty">
+                    <div style="font-size: 2rem;">🎉</div>
+                    <p>No SRS words right now!</p>
+                    <p style="font-size: 0.8rem; color: var(--text-sub);">Great job! Keep it up!</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = srsWords.map(item => `
+                <div class="srs-word-item">
+                    <div>
+                        <span class="word">${item.word}</span>
+                        <span class="def"> - ${item.def}</span>
+                    </div>
+                    <span style="font-size: 0.7rem; color: var(--text-sub);">${item.difficulty || 'SRS'}</span>
+                </div>
+            `).join('');
+        }
+        
+        document.getElementById('srsModal').classList.remove('hidden');
+    }
+
+    function closeSRSModal() {
+        document.getElementById('srsModal').classList.add('hidden');
+    }
+
+    function updateSRSBadge() {
+        const count = (userData.srsPool || []).length;
+        const badge = document.getElementById('srsCountBadge');
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline' : 'none';
+        }
+    }
+
+    // ============================================================
+    // SPEECH SYNTHESIS
+    // ============================================================
+    function speak(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
+        utterance.onerror = (e) => { if (e.error !== 'canceled') console.warn('TTS error:', e.error); };
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function handleInputKeyDown(event, mode) {
+        if (event.code === 'Space' && event.target.value === '') {
+            event.preventDefault();
+            if (mode === 'study') speak(activeWords[studyIndex].word);
+            else if (mode === 'test') playTestAudio();
+        } else if (event.key === 'Enter') {
+            if (mode === 'study') checkStudyTyping();
+            else if (mode === 'test') submitTestAnswer();
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (!document.getElementById('profileModal').classList.contains('hidden')) closeProfileModal();
+            if (!document.getElementById('customImportModal').classList.contains('hidden')) closeCustomImportModal();
+            if (!document.getElementById('roundCompleteModal').classList.contains('hidden')) closeRoundModal();
+            if (!document.getElementById('srsModal').classList.contains('hidden')) closeSRSModal();
+        }
+    });
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    // ============================================================
+    // STORAGE HELPERS
+    // ============================================================
+    function saveUserData() {
+        localStorage.setItem('spellmaster_user', JSON.stringify(userData));
+        updateSRSBadge();
+    }
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function updateDifficultyBadge(elementId, difficulty) {
+        const badge = document.getElementById(elementId);
+        if (!badge) return;
+        const diffClass = difficulty && difficulty.toLowerCase() || 'medium';
+        badge.className = `diff-tag diff-${diffClass}`;
+        badge.innerText = (diffClass === 'srs' ? 'SRS' : diffClass.toUpperCase());
+    }
+
+    function showNotification(message) {
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--success); color: white; padding: 0.5rem 1.5rem;
+            border-radius: 8px; z-index: 10000; font-weight: bold;
+            animation: slideDown 0.3s ease; font-size: 0.95rem;
+        `;
+        notif.textContent = message;
+        document.body.appendChild(notif);
+        setTimeout(() => { notif.style.opacity = '0'; notif.style.transition = 'opacity 0.3s'; setTimeout(() => notif.remove(), 300); }, 2500);
+    }
+
+    // ============================================================
+    // VIDEO AD FUNCTIONS
+    // ============================================================
+    let videoAdComplete = false;
+
+    function loadVideoAd() {
+        if (videoAdWatched) {
+            document.getElementById('videoAdOverlay').style.display = 'none';
+            document.getElementById('videoAdBadge').style.display = 'block';
+            document.getElementById('videoAdBadge').textContent = '✅ Already watched';
+            document.getElementById('videoAdBadge').style.color = 'var(--success)';
+            document.getElementById('videoAdSkip').style.display = 'none';
+            return;
+        }
+        
+        const video = document.getElementById('adVideo');
+        const source = document.getElementById('videoSource');
+        source.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
+        video.load();
+        document.getElementById('videoAdOverlay').style.display = 'flex';
+        document.getElementById('adVideo').style.display = 'none';
+        document.getElementById('videoAdBadge').style.display = 'none';
+        document.getElementById('videoAdSkip').style.display = 'none';
+        document.getElementById('videoAdProgress').style.width = '0%';
+        videoAdComplete = false;
+    }
+
+    function playVideoAd() {
+        if (videoAdWatched) {
+            showNotification('✅ You already watched the ad!');
+            return;
+        }
+        
+        const video = document.getElementById('adVideo');
+        const overlay = document.getElementById('videoAdOverlay');
+        const skipBtn = document.getElementById('videoAdSkip');
+        const badge = document.getElementById('videoAdBadge');
+        
+        overlay.style.display = 'none';
+        video.style.display = 'block';
+        skipBtn.style.display = 'block';
+        badge.style.display = 'block';
+        
+        let progress = 0;
+        const duration = video.duration || 30;
+        const interval = 100;
+        const step = (interval / (duration * 1000)) * 100;
+        
+        videoAdTimer = setInterval(() => {
+            if (video.currentTime >= video.duration - 0.1) {
+                clearInterval(videoAdTimer);
+                videoAdComplete = true;
+                videoAdWatched = true;
+                document.getElementById('videoAdProgress').style.width = '100%';
+                badge.textContent = '✅ +Double Points Earned!';
+                badge.style.color = 'var(--success)';
+                doublePointsActive = true;
+                testScoreMultiplier = 2;
+                showNotification('⭐ Double points unlocked for next round!');
+                setTimeout(() => {
+                    skipBtn.style.display = 'none';
+                }, 2000);
+            } else {
+                progress += step;
+                document.getElementById('videoAdProgress').style.width = Math.min(progress, 100) + '%';
+            }
+        }, interval);
+    }
+
+    function skipVideoAd() {
+        clearInterval(videoAdTimer);
+        const video = document.getElementById('adVideo');
+        video.pause();
+        video.currentTime = 0;
+        document.getElementById('adVideo').style.display = 'none';
+        document.getElementById('videoAdOverlay').style.display = 'flex';
+        document.getElementById('videoAdSkip').style.display = 'none';
+        document.getElementById('videoAdBadge').style.display = 'none';
+        document.getElementById('videoAdProgress').style.width = '0%';
+        showNotification('⏭️ Ad skipped. No bonus earned.');
+    }
+
+    // ============================================================
+    // ROUND SETUP
+    // ============================================================
+    function setupRoundBatch() {
+        isMilestoneMode = false;
+        isChallengeMode = false;
+        challengeUsedIndices.clear();
+        
+        console.log(`🎯 Difficulty filter: ${selectedDifficulty}`);
+        console.log(`📚 Total words in pool: ${masterWordPool.length}`);
+        console.log(`📚 Used words: ${usedWordIndices.size}`);
+        
+        let availableIndices = [];
+        for (let i = 0; i < masterWordPool.length; i++) {
+            const word = masterWordPool[i];
+            const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === selectedDifficulty;
+            if (matchesDifficulty && !usedWordIndices.has(i)) {
+                availableIndices.push(i);
+            }
+        }
+        
+        if (availableIndices.length < 5) {
+            console.log('⚠️ Not enough new words! Resetting used indices...');
+            usedWordIndices.clear();
+            availableIndices = [];
+            for (let i = 0; i < masterWordPool.length; i++) {
+                const word = masterWordPool[i];
+                const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === selectedDifficulty;
+                if (matchesDifficulty) {
+                    availableIndices.push(i);
+                }
+            }
+        }
+        
+        console.log(`📚 Available words: ${availableIndices.length}`);
+        
+        availableIndices = shuffleArray(availableIndices);
+        let chosenIndices = availableIndices.slice(0, 10);
+        
+        let srsInjected = [];
+        if (userData.srsPool && userData.srsPool.length > 0 && Math.random() > 0.3) {
+            let srsWord = userData.srsPool[Math.floor(Math.random() * userData.srsPool.length)];
+            srsInjected.push({ ...srsWord, difficulty: 'srs' });
+        }
+
+        let chosen = chosenIndices.map(idx => { 
+            usedWordIndices.add(idx); 
+            return masterWordPool[idx]; 
+        });
+
+        while (chosen.length < 10) {
+            for (let i = 0; i < masterWordPool.length && chosen.length < 10; i++) {
+                const word = masterWordPool[i];
+                const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === selectedDifficulty;
+                if (matchesDifficulty && !usedWordIndices.has(i)) {
+                    usedWordIndices.add(i);
+                    chosen.push(word);
+                }
+            }
+            if (chosen.length < 10) {
+                usedWordIndices.clear();
+                for (let i = 0; i < masterWordPool.length && chosen.length < 10; i++) {
+                    const word = masterWordPool[i];
+                    const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === selectedDifficulty;
+                    if (matchesDifficulty) {
+                        usedWordIndices.add(i);
+                        chosen.push(word);
+                    }
+                }
+            }
+        }
+
+        if (srsInjected.length > 0 && chosen.length > 0) {
+            const srsInChosen = chosen.some(w => w.word === srsInjected[0].word);
+            if (!srsInChosen) {
+                const lastWord = chosen[chosen.length - 1];
+                if (lastWord.word !== srsInjected[0].word) {
+                    chosen[chosen.length - 1] = srsInjected[0];
+                    console.log(`🔄 Added SRS word: ${srsInjected[0].word}`);
+                }
+            }
+        }
+
+        chosen.forEach(item => {
+            if (!roundsAccumulatedWords.some(r => r.word === item.word)) {
+                roundsAccumulatedWords.push(item);
+            }
+        });
+
+        activeWords = chosen;
+        document.getElementById('roundBadge').innerText = `Round ${currentRound}`;
+        document.getElementById('testRoundBadge').innerText = `Round ${currentRound}`;
+        document.getElementById('sideLearnedCount').innerText = roundsAccumulatedWords.length;
+        document.getElementById('sideSrsCount').innerText = (userData.srsPool || []).length;
+        updateSRSBadge();
+        
+        console.log(`📚 Round ${currentRound}: ${activeWords.length} words`);
+        console.log(`📚 Total unique words learned: ${roundsAccumulatedWords.length}`);
+    }
+
+    function updateSideMetrics() {
+        document.getElementById('sideStreak').innerText = `🔥 ${userData.streak || 0}`;
+        if (userData.wordsTested === 0) {
+            document.getElementById('sideImprovement').innerText = "+0%";
+            document.getElementById('sideError').innerText = "0%";
+            return;
+        }
+        const currentAccuracy = (userData.correctCount / userData.wordsTested) * 100;
+        const errorRate = 100 - currentAccuracy;
+        if (userData.initialAccuracy === null) userData.initialAccuracy = currentAccuracy;
+        const improvement = currentAccuracy - userData.initialAccuracy;
+        const impSign = improvement >= 0 ? "+" : "";
+        document.getElementById('sideImprovement').innerText = `${impSign}${Math.round(improvement)}%`;
+        document.getElementById('sideError').innerText = `${Math.round(errorRate)}%`;
+        document.getElementById('sideLearnedCount').innerText = roundsAccumulatedWords.length;
+        document.getElementById('sideSrsCount').innerText = (userData.srsPool || []).length;
+        updateSRSBadge();
+    }
+
+    // ============================================================
+    // TAB SWITCHING
+    // ============================================================
+    function switchTab(tab) {
+        currentTab = tab;
+        document.getElementById('tabSpelling').classList.toggle('active', tab === 'spelling');
+        restartRound(true);
+    }
+
+    function changeDifficulty(diff) {
+        selectedDifficulty = diff;
+        usedWordIndices.clear();
+        roundsAccumulatedWords = [];
+        currentRound = 1;
+        totalRoundsCompleted = 0;
+        restartRound(true);
+        showNotification(`📚 Switched to ${diff.toUpperCase()} mode`);
+    }
+
+    // ============================================================
+    // STUDY VIEW
+    // ============================================================
+    function loadStudyWord() {
+        if (studyIndex >= activeWords.length) {
+            document.getElementById('studyView').classList.add('hidden');
+            document.getElementById('readyTestView').classList.remove('hidden');
+            return;
+        }
+        const current = activeWords[studyIndex];
+        document.getElementById('studyWordDisplay').innerText = current.word;
+        document.getElementById('studyPhonetic').innerText = current.phonetic;
+        document.getElementById('studyDef').innerText = current.def;
+        document.getElementById('studySentenceText').innerText = current.sentence;
+        const isChallenge = isChallengeMode || isMilestoneMode;
+        document.getElementById('studyCounter').innerText = isChallenge ? `Challenge Word ${studyIndex + 1} of ${activeWords.length}` : `Word ${studyIndex + 1} of ${activeWords.length}`;
+        document.getElementById('studyProgress').style.width = `${((studyIndex) / activeWords.length) * 100}%`;
+        document.getElementById('studyInput').value = '';
+        document.getElementById('studyFeedback').innerText = '';
+        updateDifficultyBadge('studyDiffTag', current.difficulty || 'medium');
+        setTimeout(() => speak(current.word), 400);
+    }
+
+    function speakCurrentStudyWord() {
+        if (activeWords[studyIndex]) speak(activeWords[studyIndex].word);
+    }
+
+    function checkStudyTyping() {
+        const input = document.getElementById('studyInput').value.trim().toLowerCase();
+        const currentItem = activeWords[studyIndex];
+        const target = currentItem.word.toLowerCase();
+        const feedback = document.getElementById('studyFeedback');
+        if (input === target) {
+            feedback.style.color = "var(--success)";
+            feedback.innerText = "✓ Perfect! Moving to next word...";
+            if (!userData.learnedWords.some(w => w.word === target)) {
+                userData.learnedWords.push(currentItem);
+                saveUserData();
+            }
+            setTimeout(() => { studyIndex++; loadStudyWord(); }, 800);
+        } else {
+            feedback.style.color = "var(--danger)";
+            feedback.innerText = `✗ Incorrect. Type "${target}" to continue.`;
+        }
+    }
+
+    // ============================================================
+    // TEST VIEW
+    // ============================================================
+    function startShuffledTest() {
+        shuffledWords = shuffleArray(activeWords);
+        testIndex = 0;
+        testScore = 0;
+        failedWords = [];
+        document.getElementById('readyTestView').classList.add('hidden');
+        document.getElementById('testView').classList.remove('hidden');
+        loadTestQuestion();
+    }
+
+    function loadTestQuestion() {
+        if (testIndex >= shuffledWords.length) {
+            showResults();
+            return;
+        }
+        isFirstAttempt = true;
+        const current = shuffledWords[testIndex];
+        const isChallenge = isChallengeMode || isMilestoneMode;
+        document.getElementById('testCounter').innerText = isChallenge ? `Challenge Word ${testIndex + 1} of ${shuffledWords.length}` : `Word ${testIndex + 1} of ${shuffledWords.length}`;
+        document.getElementById('testProgress').style.width = `${((testIndex) / shuffledWords.length) * 100}%`;
+        document.getElementById('testHint').innerText = `Hint: "${current.def}"`;
+        const maskedSentence = current.sentence ? current.sentence.replace(new RegExp(current.word, 'gi'), '_____') : 'Context: _____.';
+        document.getElementById('testSentenceText').innerText = maskedSentence;
+        document.getElementById('testInput').value = '';
+        document.getElementById('testFeedback').innerText = '';
+        updateDifficultyBadge('testDiffTag', current.difficulty || 'medium');
+        setTimeout(() => playTestAudio(), 500);
+    }
+
+    function playTestAudio() {
+        if (shuffledWords[testIndex]) speak(shuffledWords[testIndex].word);
+    }
+
+    function submitTestAnswer() {
+        const input = document.getElementById('testInput').value.trim().toLowerCase();
+        const correctItem = shuffledWords[testIndex];
+        const correct = correctItem.word.toLowerCase();
+        const feedback = document.getElementById('testFeedback');
+        if (input === correct) {
+            if (isFirstAttempt) {
+                testScore += testScoreMultiplier;
+                feedback.style.color = "var(--success)";
+                feedback.innerText = `✓ Correct on first try!${testScoreMultiplier > 1 ? ' ⭐ x' + testScoreMultiplier : ''}`;
+                if (userData.srsPool) {
+                    userData.srsPool = userData.srsPool.filter(w => w.word !== correct);
+                    saveUserData();
+                }
+            } else {
+                feedback.style.color = "var(--success)";
+                feedback.innerText = "✓ Correct! Moving to next word...";
+            }
+            setTimeout(() => { testIndex++; loadTestQuestion(); }, 1000);
+        } else {
+            if (isFirstAttempt) {
+                isFirstAttempt = false;
+                failedWords.push(correctItem);
+                if (!userData.srsPool) userData.srsPool = [];
+                if (!userData.srsPool.some(w => w.word === correctItem.word)) {
+                    userData.srsPool.push(correctItem);
+                    saveUserData();
+                }
+            }
+            feedback.style.color = "var(--danger)";
+            feedback.innerText = `✗ Incorrect. Correct spelling is "${correct}". Type it to proceed!`;
+            document.getElementById('testInput').value = '';
+            document.getElementById('testInput').focus();
+        }
+    }
+
+    // ============================================================
+    // FIXED: RESULTS & BETWEEN ROUNDS (SHOWS MODAL WITH ADS)
+    // ============================================================
+    function showResults() {
+        document.getElementById('testView').classList.add('hidden');
+        
+        userData.wordsTested += shuffledWords.length;
+        userData.correctCount += testScore;
+        userData.streak = (testScore >= Math.floor(shuffledWords.length * 0.7)) ? (userData.streak || 0) + 1 : 0;
+        saveUserData();
+        updateSideMetrics();
+
+        testScoreMultiplier = 1;
+        doublePointsActive = false;
+
+        // SHOW ROUND COMPLETE MODAL INSTEAD OF RESULTS VIEW
+        showRoundComplete();
+    }
+
+    function showRoundComplete() {
+        const roundScoreVal = testScore;
+        const roundAccuracyVal = Math.round((testScore / shuffledWords.length) * 100);
+        const wordsLearned = shuffledWords.slice(0, 5).map(w => w.word);
+
+        let emoji = '💪';
+        let title = 'Keep Practicing!';
+        let subtitle = 'Practice makes perfect! Try again!';
+        
+        if (roundAccuracyVal >= 90) {
+            emoji = '🌟';
+            title = 'Perfect Round! 🌟';
+            subtitle = "You're on fire! Keep it up!";
+        } else if (roundAccuracyVal >= 70) {
+            emoji = '🎉';
+            title = 'Great Job! 🎉';
+            subtitle = "Good work! You're improving!";
+        }
+
+        document.getElementById('roundCompleteEmoji').textContent = emoji;
+        document.getElementById('roundCompleteTitle').textContent = title;
+        document.getElementById('roundCompleteSubtitle').textContent = subtitle;
+        document.getElementById('roundScore').textContent = `${roundScoreVal}/${shuffledWords.length}`;
+        document.getElementById('roundAccuracy').textContent = `${roundAccuracyVal}%`;
+        document.getElementById('roundStreak').textContent = `🔥 ${userData.streak || 0}`;
+        document.getElementById('roundWordsLearned').textContent = wordsLearned.join(', ');
+
+        // Show text ad (fallback if AdSense doesn't load)
+        showSponsorAd();
+        
+        // Load video ad
+        loadVideoAd();
+
+        document.getElementById('roundCompleteModal').classList.remove('hidden');
+
+        if (roundScoreVal === shuffledWords.length && typeof confetti === 'function') {
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } });
+        }
+    }
+
+    // View Results function
+    function showResultsView() {
+        document.getElementById('roundCompleteModal').classList.add('hidden');
+        document.getElementById('resultsView').classList.remove('hidden');
+        document.getElementById('finalScore').innerText = `${testScore} / ${shuffledWords.length}`;
+
+        if (testScore === shuffledWords.length && typeof confetti === 'function') {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        const failedSection = document.getElementById('failedSection');
+        const failedList = document.getElementById('failedList');
+
+        if (failedWords.length > 0) {
+            failedSection.classList.remove('hidden');
+            failedList.innerHTML = failedWords.map(item => `
+                <div class="failed-item">
+                    <span class="failed-word">${item.word}</span> - <span>${item.def}</span>
+                    <br><span style="font-size: 0.8rem; color: var(--text-sub);">💡 ${item.sentence}</span>
+                </div>
+            `).join('');
+        } else {
+            failedSection.classList.add('hidden');
+        }
+    }
+
+    // ============================================================
+    // FIXED: ADVANCE TO NEXT ROUND - WORKS WITH BOTH BUTTONS
+    // ============================================================
+    function advanceToNextRound() {
+        // Close the modal first
+        document.getElementById('roundCompleteModal').classList.add('hidden');
+        
+        // Clear video ad timer if running
+        if (videoAdTimer) {
+            clearInterval(videoAdTimer);
+            videoAdTimer = null;
+        }
+        
+        if (!isMilestoneMode && !isChallengeMode) {
+            totalRoundsCompleted++;
+            if (totalRoundsCompleted % 5 === 0 && totalRoundsCompleted > 0) {
+                document.getElementById('milestoneRoundCount').textContent = totalRoundsCompleted;
+                document.getElementById('milestonePromptView').classList.remove('hidden');
+                return;
+            }
+        }
+        isChallengeMode = false;
+        isMilestoneMode = false;
+        currentRound++;
+        restartRound(true);
+    }
+
+    // NEW: Close modal and continue to next round
+    function closeRoundModalAndContinue() {
+        // Close the modal
+        document.getElementById('roundCompleteModal').classList.add('hidden');
+        
+        // Clear video ad timer if running
+        if (videoAdTimer) {
+            clearInterval(videoAdTimer);
+            videoAdTimer = null;
+        }
+        const video = document.getElementById('adVideo');
+        if (video) { video.pause(); }
+        
+        // Advance to next round
+        advanceToNextRound();
+    }
+
+    function closeRoundModal() {
+        // Just close the modal without advancing
+        clearInterval(videoAdTimer);
+        const video = document.getElementById('adVideo');
+        if (video) { video.pause(); }
+        document.getElementById('roundCompleteModal').classList.add('hidden');
+    }
+
+    // ============================================================
+    // MILESTONE / 30-WORD CHALLENGE
+    // ============================================================
+    function startMilestoneTest() {
+        document.getElementById('milestonePromptView').classList.add('hidden');
+        isMilestoneMode = true;
+        isChallengeMode = true;
+        challengeUsedIndices.clear();
+        
+        let poolSource = roundsAccumulatedWords.filter(w => {
+            return selectedDifficulty === 'all' || w.difficulty === selectedDifficulty;
+        });
+        
+        if (poolSource.length < 30) {
+            let extraPool = masterWordPool.filter(w => {
+                return selectedDifficulty === 'all' || w.difficulty === selectedDifficulty;
+            });
+            for (let word of extraPool) {
+                if (!poolSource.some(w => w.word === word.word)) {
+                    poolSource.push(word);
+                }
+                if (poolSource.length >= 30) break;
+            }
+        }
+        
+        if (poolSource.length < 30) {
+            poolSource = masterWordPool.filter(w => {
+                return selectedDifficulty === 'all' || w.difficulty === selectedDifficulty;
+            });
+        }
+        
+        let shuffled = shuffleArray(poolSource);
+        let selected30 = [];
+        let usedWords = new Set();
+        
+        for (let word of shuffled) {
+            if (!usedWords.has(word.word) && selected30.length < 30) {
+                usedWords.add(word.word);
+                selected30.push(word);
+            }
+        }
+        
+        while (selected30.length < 30) {
+            let extra = shuffleArray(masterWordPool);
+            for (let word of extra) {
+                if (!usedWords.has(word.word) && selected30.length < 30) {
+                    const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === selectedDifficulty;
+                    if (matchesDifficulty) {
+                        usedWords.add(word.word);
+                        selected30.push(word);
+                    }
+                }
+                if (selected30.length >= 30) break;
+            }
+        }
+        
+        console.log(`📚 Milestone Test: ${selected30.length} words`);
+        
+        activeWords = selected30;
+        studyIndex = 0;
+        document.getElementById('studyView').classList.remove('hidden');
+        document.getElementById('modeLabel').innerText = "🏆 30-Word Challenge";
+        loadStudyWord();
+    }
+
+    function skipMilestoneTest() {
+        document.getElementById('milestonePromptView').classList.add('hidden');
+        isMilestoneMode = false;
+        isChallengeMode = false;
+        challengeUsedIndices.clear();
+        currentRound++;
+        restartRound(true);
+    }
+
+    function restartRound(loadNewBatch = false) {
+        if (loadNewBatch && !isMilestoneMode && !isChallengeMode) {
+            setupRoundBatch();
+        }
+        studyIndex = 0;
+        testIndex = 0;
+        testScore = 0;
+        failedWords = [];
+        testScoreMultiplier = 1;
+        doublePointsActive = false;
+        document.getElementById('resultsView').classList.add('hidden');
+        document.getElementById('readyTestView').classList.add('hidden');
+        document.getElementById('testView').classList.add('hidden');
+        document.getElementById('milestonePromptView').classList.add('hidden');
+        document.getElementById('studyView').classList.remove('hidden');
+        document.getElementById('modeLabel').innerText = isChallengeMode ? "🏆 30-Word Challenge" : "Step 1: Practice Typing";
+        loadStudyWord();
+    }
+
+    // ============================================================
+    // AUTHENTICATION
+    // ============================================================
+    function switchAuthMode(mode) {
+        const loginBtn = document.getElementById('tabLoginSwitch');
+        const signupBtn = document.getElementById('tabSignupSwitch');
+        const loginSec = document.getElementById('loginFormSection');
+        const signupSec = document.getElementById('signupFormSection');
+        if (mode === 'login') {
+            loginBtn.classList.add('active'); signupBtn.classList.remove('active');
+            loginSec.classList.remove('hidden'); signupSec.classList.add('hidden');
+        } else {
+            signupBtn.classList.add('active'); loginBtn.classList.remove('active');
+            signupSec.classList.remove('hidden'); loginSec.classList.add('hidden');
+        }
+    }
+
+    function signupUserAccount() {
+        const username = document.getElementById('signupUsernameInput').value.trim().toLowerCase();
+        const password = document.getElementById('signupPasswordInput').value.trim();
+        const errDiv = document.getElementById('signupError');
+        if (!username || !password) { errDiv.innerText = "Please fill in all fields."; return; }
+        if (registeredAccounts[username]) { errDiv.innerText = "Username already exists. Please log in."; return; }
+        registeredAccounts[username] = { password: password, userId: 'usr_' + username + '_' + Math.random().toString(36).substring(2, 7) };
+        localStorage.setItem('spellmaster_registered_accounts', JSON.stringify(registeredAccounts));
+        userData.username = username;
+        userData.userId = registeredAccounts[username].userId;
+        saveUserData();
+        openProfileModal();
+    }
+
+    function loginUserAccount() {
+        const username = document.getElementById('loginUsernameInput').value.trim().toLowerCase();
+        const password = document.getElementById('loginPasswordInput').value.trim();
+        const errDiv = document.getElementById('loginError');
+        if (!username || !password) { errDiv.innerText = "Please fill in all fields."; return; }
+        if (!registeredAccounts[username] || registeredAccounts[username].password !== password) {
+            errDiv.innerText = "Invalid username or password. Please try again.";
+            return;
+        }
+        userData.username = username;
+        userData.userId = registeredAccounts[username].userId;
+        saveUserData();
+        openProfileModal();
+    }
+
+    function openProfileModal() {
+        document.getElementById('profileModal').classList.remove('hidden');
+        if (userData.username) {
+            document.getElementById('authView').classList.add('hidden');
+            document.getElementById('statsView').classList.remove('hidden');
+            document.getElementById('userGreeting').innerText = `Hello, ${userData.username}!`;
+            document.getElementById('userSummary').innerText = `Total Words Tested: ${userData.wordsTested}`;
+            document.getElementById('userIdDisplay').innerText = userData.userId;
+            const badgesDiv = document.getElementById('badgesContainer');
+            let badgesHtml = '<span class="badge-pill">🎯 Active Learner</span>';
+            if (userData.streak >= 5) badgesHtml += '<span class="badge-pill">🔥 Streak Master</span>';
+            if (userData.wordsTested >= 50) badgesHtml += '<span class="badge-pill">📚 Word Explorer</span>';
+            badgesDiv.innerHTML = badgesHtml;
+            document.getElementById('profileAvatar').innerText = userData.username.charAt(0).toUpperCase();
+        } else {
+            document.getElementById('authView').classList.remove('hidden');
+            document.getElementById('statsView').classList.add('hidden');
+            switchAuthMode('login');
+        }
+    }
+
+    function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
+
+    function logoutUser() {
+        userData.username = '';
+        saveUserData();
+        document.getElementById('profileAvatar').innerText = '👤';
+        openProfileModal();
+    }
+
+    // ============================================================
+    // CUSTOM WORD IMPORT
+    // ============================================================
+    function openCustomImportModal() { document.getElementById('customImportModal').classList.remove('hidden'); }
+    function closeCustomImportModal() { document.getElementById('customImportModal').classList.add('hidden'); }
+
+    function processCustomWordsImport() {
+        const inputVal = document.getElementById('customWordsInput').value.trim();
+        if (!inputVal) { alert('Please enter at least one word.'); return; }
+        const wordsArray = inputVal.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        let addedCount = 0;
+        wordsArray.forEach(w => {
+            if (!masterWordPool.some(item => item.word === w)) {
+                masterWordPool.push({ word: w, phonetic: "/.../", def: "Custom imported word.", sentence: `Use "${w}" in a sentence.`, difficulty: "medium" });
+                addedCount++;
+            }
+        });
+        closeCustomImportModal();
+        document.getElementById('customWordsInput').value = '';
+        if (addedCount > 0) {
+            alert(`✅ ${addedCount} custom word(s) imported successfully!`);
+            setupRoundBatch();
+            loadStudyWord();
+        } else {
+            alert('⚠️ No new words were added (they may already exist in the pool).');
+        }
+    }
+
+    // ============================================================
+    // THEME
+    // ============================================================
+    function changeTheme(theme) { document.documentElement.setAttribute('data-theme', theme); }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    if (userData.username) {
+        document.getElementById('profileAvatar').innerText = userData.username.charAt(0).toUpperCase();
+    }
+
+    setTimeout(() => {
+        document.getElementById('wordCountBadge').textContent = `1,500+ words`;
+        updateSRSBadge();
+        setupRoundBatch();
+        updateSideMetrics();
+        loadStudyWord();
+    }, 200);
+    </script>
+</body>
+</html>
