@@ -9,7 +9,7 @@ A powerful spelling and vocabulary learning application designed to help users m
 
 ## 🚀 Live Demo
 
-👉 **[Click here to try SpellMaster](https://jwick9436-commits.github.io/spellmaster/)**
+👉 **[Click here to try SpellMaster](https://spellmaster-app.netlify.app/)**
 
 ---
 
