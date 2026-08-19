@@ -1221,6 +1221,39 @@
         </div>
     </div>
 
+<script>
+// ==============================================
+// WELCOME POPUP FUNCTIONS
+// ==============================================
+function closeWelcomePopup() {
+    const dontShow = document.getElementById('dontShowWelcome');
+    if (dontShow && dontShow.checked) {
+        localStorage.setItem('spellmaster_welcome_shown', 'true');
+    }
+    document.getElementById('welcomePopup').style.display = 'none';
+}
+
+function showWelcomePopup() {
+    const alreadySeen = localStorage.getItem('spellmaster_welcome_shown');
+    if (!alreadySeen) {
+        const popup = document.getElementById('welcomePopup');
+        if (popup) {
+            popup.style.display = 'flex';
+        }
+    }
+}
+
+document.addEventListener('click', function(e) {
+    const popup = document.getElementById('welcomePopup');
+    if (popup && e.target === popup) {
+        closeWelcomePopup();
+    }
+});
+
+setTimeout(showWelcomePopup, 800);
+</script>
+<script>
+
     
 
     <script>
