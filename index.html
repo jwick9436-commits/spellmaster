@@ -793,11 +793,66 @@
     </style>
 </head>
 <body>
-
-
-    <!-- REST OF YOUR BODY CONTENT -->
-    <div class="header">
-    <!-- ... -->
+<!-- Welcome Popup -->
+<div id="welcomePopup" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:2rem;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;">
+        
+        <!-- Close Button -->
+        <button onclick="closeWelcomePopup()" style="position:absolute;top:10px;right:15px;background:none;border:none;color:var(--text-sub);font-size:1.5rem;cursor:pointer;">×</button>
+        
+        <!-- Icon -->
+        <div style="text-align:center;font-size:3rem;margin-bottom:0.5rem;">📚</div>
+        
+        <!-- Title -->
+        <h2 style="text-align:center;margin:0 0 0.25rem 0;font-size:1.5rem;">Welcome to SpellMaster!</h2>
+        
+        <!-- Subtitle -->
+        <p style="text-align:center;color:var(--text-sub);font-size:0.9rem;margin-bottom:1rem;">Learn English spelling the smart way</p>
+        
+        <!-- Features -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0;">
+            <div style="background:var(--bg);padding:0.5rem;border-radius:8px;text-align:center;">
+                <div style="font-size:1.5rem;">🎯</div>
+                <div style="font-size:0.75rem;font-weight:bold;">1,500+ Words</div>
+            </div>
+            <div style="background:var(--bg);padding:0.5rem;border-radius:8px;text-align:center;">
+                <div style="font-size:1.5rem;">🎤</div>
+                <div style="font-size:0.75rem;font-weight:bold;">Voice Test</div>
+            </div>
+            <div style="background:var(--bg);padding:0.5rem;border-radius:8px;text-align:center;">
+                <div style="font-size:1.5rem;">📊</div>
+                <div style="font-size:0.75rem;font-weight:bold;">SRS System</div>
+            </div>
+            <div style="background:var(--bg);padding:0.5rem;border-radius:8px;text-align:center;">
+                <div style="font-size:1.5rem;">🔥</div>
+                <div style="font-size:0.75rem;font-weight:bold;">Streak Tracking</div>
+            </div>
+        </div>
+        
+        <!-- Description -->
+        <p style="text-align:center;color:var(--text-sub);font-size:0.85rem;line-height:1.5;margin-bottom:1rem;">
+            Practice spelling with definitions, example sentences, and voice tests. 
+            Track your progress and improve daily!
+        </p>
+        
+        <!-- How to Use -->
+        <div style="background:var(--bg);border-radius:8px;padding:0.75rem;margin-bottom:1rem;">
+            <p style="font-size:0.8rem;color:var(--text-sub);margin:0;text-align:center;">
+                💡 <strong>How to use:</strong> Practice → Voice Test → Review → Repeat
+            </p>
+        </div>
+        
+        <!-- Buttons -->
+        <div style="display:flex;gap:0.5rem;">
+            <button onclick="closeWelcomePopup()" class="btn-main" style="flex:1;">Start Learning 🚀</button>
+        </div>
+        
+        
+            
+            </label>
+        </div>
+    </div>
+</div>
 
     <div class="header">
         <h2 style="margin: 0; text-transform: lowercase;">spellmaster <span class="word-count-badge" id="wordCountBadge">Loading...</span></h2>
