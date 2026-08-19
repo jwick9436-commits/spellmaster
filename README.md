@@ -1,9 +1,17 @@
 # 📚 SpellMaster
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://YOUR_USERNAME.github.io/spellmaster/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://jwick9436-commits.github.io/spellmaster/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
 A powerful spelling and vocabulary learning application designed to help users master English spelling through interactive practice and spaced repetition.
+
+---
+
+## 🚀 Live Demo
+
+👉 **[Click here to try SpellMaster](https://jwick9436-commits.github.io/spellmaster/)**
+
+---
 
 ## ✨ Features
 
@@ -17,6 +25,8 @@ A powerful spelling and vocabulary learning application designed to help users m
 - 💰 **Ad-Supported** (Google AdSense)
 - 📱 **Fully Responsive** design
 
+---
+
 ## 🎯 How It Works
 
 1. **Practice** - Type words with definitions and sentence context
@@ -24,9 +34,7 @@ A powerful spelling and vocabulary learning application designed to help users m
 3. **Review** - Failed words go to SRS for extra practice
 4. **Track** - Monitor your progress with detailed metrics
 
-## 🚀 Live Demo
-
-👉 [Click here to try SpellMaster](https://YOUR_USERNAME.github.io/spellmaster/)
+---
 
 ## 🛠️ Technologies Used
 
@@ -37,8 +45,10 @@ A powerful spelling and vocabulary learning application designed to help users m
 - Web Speech API
 - localStorage for data persistence
 
+---
+
 ## 📦 Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/spellmaster.git
+git clone https://github.com/jwick9436-commits/spellmaster.git
