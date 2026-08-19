@@ -1,6 +1,6 @@
 # 📚 SpellMaster
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://jwick9436-commits.github.io/spellmaster/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://spellmaster-app.netlify.app/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
 A powerful spelling and vocabulary learning application designed to help users master English spelling through interactive practice and spaced repetition.
