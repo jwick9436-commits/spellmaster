@@ -24,7 +24,7 @@
     <!-- ============================================= -->
     <!-- GOOGLE ADSENSE - ADD YOUR ID HERE -->
     <!-- ============================================= -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXX"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7233009906186326"
          crossorigin="anonymous"></script>
 
     <style>
@@ -790,6 +790,72 @@
             .results-actions { flex-direction: column; }
             .word-display { font-size: 1.6rem; }
         }
+        /* ============================================= */
+        /* HIDE ADS ON MOBILE - ADD THIS AT THE BOTTOM */
+        /* ============================================= */
+
+        /* Hide left sidebar ads on tablets and smaller screens */
+        @media (max-width: 1100px) {
+            .left-ad-column { 
+            display: none; 
+             }
+        }
+
+        /* Hide right sidebar ads on smaller screens */
+        @media (max-width: 900px) {
+            .right-sidebar { 
+             display: none; 
+            }
+        }
+
+        /* Additional mobile fixes */
+        @media (max-width: 600px) {
+            .ad-box.ad-top {
+                min-height: 60px !important;
+                max-height: 60px;
+            }
+        }
+        /* ============================================== */
+        /* EXTRA: HIDE BOTH AD COLUMNS AND FIX LAYOUT */
+        /* ============================================== */
+
+        /* Hide left sidebar ads on smaller screens */
+        @media (max-width: 1100px) {
+            .left-ad-column { 
+                display: none !important; 
+            }
+        }
+
+        /* Hide right sidebar ads on smaller screens */
+        @media (max-width: 900px) {
+            .right-sidebar { 
+                display: none !important; 
+            }
+            /* Make sure content fills the full width */
+            .middle-section {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 1 !important;
+            }
+            /* Fix the layout grid */
+            .layout-grid {
+                flex-direction: column !important;
+            }
+            .left-sidebar, 
+            .right-sidebar { 
+                width: 100% !important; 
+            }
+        }
+
+        /* Hide all ad containers completely on phones */
+        @media (max-width: 600px) {
+            .left-ad-column,
+            .right-sidebar,
+            .ad-left-full,
+            .ad-sidebar-full {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -868,30 +934,33 @@
         </div>
     </div>
 
-    <!-- TOP AD BANNER -->
-    <div class="ad-box ad-top">
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:728px;height:90px"
-             data-ad-client="ca-pub-XXXXXXXXXXXXX"
-             data-ad-slot="XXXXXXXXXX"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
+        <!-- Top Banner -->
+        <div class="ad-box ad-top" style="min-height: 90px;">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-7233009906186326"
+                data-ad-slot="2307923501"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
 
     <div class="divider-line"></div>
 
     <div class="layout-grid">
         
-        <!-- LEFT AD COLUMN -->
+        
+        <!-- left banner -->
         <aside class="left-ad-column">
             <div class="ad-left-full">
                 <ins class="adsbygoogle"
-                     style="display:inline-block;width:160px;height:600px"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"></ins>
+                    style="display:inline-block;width:160px;height:600px"
+                    data-ad-client="ca-pub-7233009906186326"
+                    data-ad-slot="6981665685"></ins>
                 <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
+                    (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
         </aside>
@@ -1064,11 +1133,13 @@
                 <aside class="right-sidebar">
                     <div class="ad-sidebar-full">
                         <ins class="adsbygoogle"
-                             style="display:inline-block;width:300px;height:600px"
-                             data-ad-client="ca-pub-XXXXXXXXXXXXX"
-                             data-ad-slot="XXXXXXXXXX"></ins>
+                            style="display:block"
+                            data-ad-client="ca-pub-7233009906186326"
+                            data-ad-slot="5612065074"
+                            data-ad-format="auto"
+                            data-full-width-responsive="true"></ins>
                         <script>
-                             (adsbygoogle = window.adsbygoogle || []).push({});
+                            (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
                 </aside>
@@ -1102,15 +1173,7 @@
                     </div>
                 </div>
                 
-                <!-- TEXT AD (Between Rounds) -->
-                <div class="sponsored-ad-box">
-                    <span class="ad-icon">📢</span>
-                    <div class="ad-text">
-                        <div class="ad-label">Sponsored</div>
-                        <div class="ad-message" id="sponsorMessage">Improve your writing with Grammarly</div>
-                    </div>
-                    <a href="#" target="_blank" class="ad-link" id="sponsorLink">Learn More →</a>
-                </div>
+                
 
                 <!-- VIDEO AD -->
                 <div id="videoAdContainer">
@@ -1389,8 +1452,8 @@ setTimeout(showWelcomePopup, 800);
 
     const easySuffixMap = {
         ly: ['friend', 'favour', 'fami', 'love', 'home', 'year', 'day', 'week', 'month', 'hour', 'time', 'life', 'world', 'part', 'side', 'end'],
-        ing: ['schedul', 'address', 'travel', 'listen', 'market', 'bottle', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
-        ed: ['schedul', 'address', 'travel', 'listen', 'market', 'bottle', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
+        ing: ['schedul', 'address', 'travel', 'listen', 'market', 'bottl', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
+        ed: ['schedul', 'address', 'travel', 'listen', 'market', 'bottl', 'garden', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'wash', 'dry', 'fold'],
         er: ['travel', 'listen', 'read', 'write', 'speak', 'talk', 'walk', 'run', 'swim', 'play', 'sing', 'dance', 'work', 'teach', 'learn', 'study', 'practice', 'train', 'cook', 'bake', 'clean', 'fold', 'sing', 'dance'],
         ness: ['happy', 'sad', 'kind', 'rude', 'friend', 'wild', 'weak', 'strong', 'bitter', 'sweet', 'dark', 'bright', 'cold', 'warm', 'cool', 'hot', 'light', 'heavy', 'soft', 'hard', 'smooth', 'rough', 'mean', 'polite', 'rude'],
         ment: ['enjoy', 'excite', 'move', 'treat', 'state', 'agree', 'argue', 'base', 'place', 'judge', 'manage', 'govern', 'arrange', 'appoint', 'assign'],
@@ -1434,28 +1497,8 @@ setTimeout(showWelcomePopup, 800);
     console.log(`✅ Total words loaded: ${masterWordPool.length}`);
     console.log(`✅ Easy: ${easyExpanded.length}, Medium: ${mediumExpanded.length}, Hard: ${hardExpanded.length}`);
 
-    // ============================================================
-    // SPONSORED ADS DATA (Fallback if AdSense fails)
-    // ============================================================
-    const sponsorAds = [
-        { name: 'Grammarly', message: 'Improve your writing with AI-powered tools', url: 'https://grammarly.com', icon: '✍️' },
-        { name: 'Duolingo', message: 'Learn languages free with fun games', url: 'https://duolingo.com', icon: '🦉' },
-        { name: 'Audible', message: 'Listen to audiobooks while learning', url: 'https://audible.com', icon: '🎧' },
-        { name: 'WordReference', message: 'The best online dictionary for learners', url: 'https://wordreference.com', icon: '📖' }
-    ];
-
-    let sponsorIndex = 0;
-
-    function showSponsorAd() {
-        const ad = sponsorAds[sponsorIndex % sponsorAds.length];
-        sponsorIndex++;
-        const msgEl = document.getElementById('sponsorMessage');
-        const linkEl = document.getElementById('sponsorLink');
-        const iconEl = document.querySelector('.sponsored-ad-box .ad-icon');
-        if (msgEl) msgEl.textContent = ad.message;
-        if (linkEl) { linkEl.href = ad.url; linkEl.textContent = 'Learn More →'; }
-        if (iconEl) iconEl.textContent = ad.icon;
-    }
+    
+    
 
     // ============================================================
     // USER SYSTEM
@@ -2008,7 +2051,7 @@ setTimeout(showWelcomePopup, 800);
         document.getElementById('roundWordsLearned').textContent = wordsLearned.join(', ');
 
         // Show text ad (fallback if AdSense doesn't load)
-        showSponsorAd();
+       
         
         // Load video ad
         loadVideoAd();
